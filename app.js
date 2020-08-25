@@ -53,6 +53,35 @@ app.post("/api/tour", (req, res) => {
   });
 });
 
+app.patch("/api/tour/:id", (req, res) => {
+  const body = req.body;
+  const id = req.params.id;
+  const updated_tours = [...tours];
+  let response = undefined;
+  updated_tours.forEach((tour, index) => {
+    if (tour.id == id) {
+      updated_tours[index] = {
+        ...updated_tours[index],
+        ...body,
+      };
+      response = {
+        ...updated_tours[index],
+        ...body,
+      };
+    }
+  });
+  const result = fs.writeFileSync(
+    "./data/tours-simple.json",
+    JSON.stringify(updated_tours)
+  );
+  res.status(202).json({
+    success: true,
+    data: {
+      tour: response,
+    },
+  });
+});
+
 app.listen(5000, "localhost", () => {
   console.log("we are listening at 5000...");
 });
