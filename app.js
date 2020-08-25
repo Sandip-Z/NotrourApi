@@ -8,6 +8,11 @@ const tours = JSON.parse(
 
 app.use(express.json());
 
+app.use((req, res, next) => {
+  req.requestedAt = new Date().toISOString();
+  next();
+});
+
 const getAllTours = (req, res) => {
   res.status(200).json({
     success: true,
@@ -24,6 +29,7 @@ const getTourById = (req, res) => {
   if (result.length) {
     res.status(200).json({
       success: true,
+      requestedAt: req.requestedAt,
       data: {
         tour: result,
       },
