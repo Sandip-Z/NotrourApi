@@ -1,10 +1,15 @@
 const express = require("express");
 const fs = require("fs");
 const app = express();
+const morgan = require("morgan");
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/data/tours-simple.json`)
 );
+
+//middlewares
+
+app.use(morgan("dev"));
 
 app.use(express.json());
 
@@ -13,6 +18,7 @@ app.use((req, res, next) => {
   next();
 });
 
+//routes handlers
 const getAllTours = (req, res) => {
   res.status(200).json({
     success: true,
@@ -113,6 +119,8 @@ const deleteTour = (req, res) => {
     });
   }
 };
+
+//routes
 
 // app.get("/api/tours", getAllTours );
 
