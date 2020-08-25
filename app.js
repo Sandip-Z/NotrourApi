@@ -120,6 +120,41 @@ const deleteTour = (req, res) => {
   }
 };
 
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    success: false,
+    message: "Route yet not defined",
+  });
+};
+
+const getUserById = (req, res) => {
+  res.status(500).json({
+    success: false,
+    message: "Route yet not defined",
+  });
+};
+
+const createUser = (req, res) => {
+  res.status(500).json({
+    success: false,
+    message: "Route yet not defined",
+  });
+};
+
+const updateUser = (req, res) => {
+  res.status(500).json({
+    success: false,
+    message: "Route yet not defined",
+  });
+};
+
+const deleteUser = (req, res) => {
+  res.status(500).json({
+    success: false,
+    message: "Route yet not defined",
+  });
+};
+
 //routes
 
 // app.get("/api/tours", getAllTours );
@@ -139,6 +174,13 @@ app
   .get(getTourById)
   .patch(updateTour)
   .delete(deleteTour);
+
+app.route("/api/users").get(getAllUsers).post(createUser);
+app
+  .route("/api/user/:id")
+  .get(getUserById)
+  .patch(updateUser)
+  .delete(deleteUser);
 
 app.listen(5000, "localhost", () => {
   console.log("we are listening at 5000...");
