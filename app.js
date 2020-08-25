@@ -60,26 +60,32 @@ app.patch("/api/tour/:id", (req, res) => {
   let response = undefined;
   updated_tours.forEach((tour, index) => {
     if (tour.id == id) {
-      updated_tours[index] = {
-        ...updated_tours[index],
-        ...body,
-      };
       response = {
         ...updated_tours[index],
         ...body,
       };
+      updated_tours[index] = {
+        ...response,
+      };
     }
   });
-  const result = fs.writeFileSync(
-    "./data/tours-simple.json",
-    JSON.stringify(updated_tours)
-  );
-  res.status(202).json({
-    success: true,
-    data: {
-      tour: response,
-    },
-  });
+  if (tours.filter((tour) => tour.id == id).length) {
+    const result = fs.writeFileSync(
+      "./data/tours-simple.json",
+      JSON.stringify(updated_tours)
+    );
+    res.status(202).json({
+      success: true,
+      data: {
+        tour: response,
+      },
+    });
+  } else {
+    res.status(404).json({
+      success: false,
+      message: `Couldnot find a tour with id ${id}`,
+    });
+  }
 });
 
 app.listen(5000, "localhost", () => {
