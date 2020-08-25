@@ -88,6 +88,26 @@ app.patch("/api/tour/:id", (req, res) => {
   }
 });
 
+app.delete("/api/tour/:id", (req, res) => {
+  const id = req.params.id;
+  const updated_tours = tours.filter((tour) => tour.id != id);
+  if (updated_tours.length !== tours.length) {
+    const result = fs.writeFileSync(
+      "./data/tours-simple.json",
+      JSON.stringify(updated_tours)
+    );
+    res.status(200).json({
+      success: true,
+      message: `Successfully deleted tour with id ${id}`,
+    });
+  } else {
+    res.status(404).json({
+      success: false,
+      message: `Couldnot find a tour with id ${id} to delete`,
+    });
+  }
+});
+
 app.listen(5000, "localhost", () => {
   console.log("we are listening at 5000...");
 });
