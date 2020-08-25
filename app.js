@@ -8,7 +8,7 @@ const tours = JSON.parse(
 
 app.use(express.json());
 
-app.get("/api/tours", (req, res) => {
+const getAllTours = (req, res) => {
   res.status(200).json({
     success: true,
     result: tours.length,
@@ -16,9 +16,9 @@ app.get("/api/tours", (req, res) => {
       tours,
     },
   });
-});
+};
 
-app.get("/api/tours/:id", (req, res) => {
+const getTourById = (req, res) => {
   const id = req.params.id;
   const result = tours.filter((tour) => tour.id == id);
   if (result.length) {
@@ -34,9 +34,9 @@ app.get("/api/tours/:id", (req, res) => {
       message: `Couldnot find a tour with id ${id}`,
     });
   }
-});
+};
 
-app.post("/api/tour", (req, res) => {
+const postTour = (req, res) => {
   const body = req.body;
   const newId = tours[tours.length - 1].id + 1;
   const bodyWithId = { id: newId, ...body };
@@ -51,9 +51,9 @@ app.post("/api/tour", (req, res) => {
       tour: bodyWithId,
     },
   });
-});
+};
 
-app.patch("/api/tour/:id", (req, res) => {
+const updateTour = (req, res) => {
   const body = req.body;
   const id = req.params.id;
   const updated_tours = [...tours];
@@ -86,9 +86,9 @@ app.patch("/api/tour/:id", (req, res) => {
       message: `Couldnot find a tour with id ${id}`,
     });
   }
-});
+};
 
-app.delete("/api/tour/:id", (req, res) => {
+const deleteTour = (req, res) => {
   const id = req.params.id;
   const updated_tours = tours.filter((tour) => tour.id != id);
   if (updated_tours.length !== tours.length) {
@@ -106,7 +106,25 @@ app.delete("/api/tour/:id", (req, res) => {
       message: `Couldnot find a tour with id ${id} to delete`,
     });
   }
-});
+};
+
+// app.get("/api/tours", getAllTours );
+
+// app.get("/api/tour/:id", getTourById );
+
+// app.post("/api/tour", postTour);
+
+// app.patch("/api/tour/:id",updateTour );
+
+// app.delete("/api/tour/:id", deleteTour);
+
+app.route("/api/tours").get(getAllTours);
+app.route("/api/tour").post(postTour);
+app
+  .route("/api/tour/:id")
+  .get(getTourById)
+  .patch(updateTour)
+  .delete(deleteTour);
 
 app.listen(5000, "localhost", () => {
   console.log("we are listening at 5000...");
