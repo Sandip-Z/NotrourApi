@@ -21,13 +21,19 @@ app.get("/api/tours", (req, res) => {
 app.get("/api/tours/:id", (req, res) => {
   const id = req.params.id;
   const result = tours.filter((tour) => tour.id == id);
-
-  res.status(200).json({
-    success: true,
-    data: {
-      tour: result,
-    },
-  });
+  if (result.length) {
+    res.status(200).json({
+      success: true,
+      data: {
+        tour: result,
+      },
+    });
+  } else {
+    res.status(404).json({
+      success: false,
+      message: `Couldnot find a tour with id ${id}`,
+    });
+  }
 });
 
 app.post("/api/tour", (req, res) => {
