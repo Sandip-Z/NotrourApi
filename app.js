@@ -18,6 +18,4 @@ app.use((req, res, next) => {
 app.use("/api/user", userRouter);
 app.use("/api/tour", tourRouter);
 
-app.listen(5000, "localhost", () => {
-  console.log("we are listening at 5000...");
-});
+module.exports = app;
