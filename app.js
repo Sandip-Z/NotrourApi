@@ -18,6 +18,11 @@ app.use((req, res, next) => {
   next();
 });
 
+//mounting routes
+
+const tourRouter = express.Router();
+const userRouter = express.Router();
+
 //routes handlers
 const getAllTours = (req, res) => {
   res.status(200).json({
@@ -167,20 +172,14 @@ const deleteUser = (req, res) => {
 
 // app.delete("/api/tour/:id", deleteTour);
 
-app.route("/api/tours").get(getAllTours);
-app.route("/api/tour").post(postTour);
-app
-  .route("/api/tour/:id")
-  .get(getTourById)
-  .patch(updateTour)
-  .delete(deleteTour);
+tourRouter.route("/").get(getAllTours).post(postTour);
+tourRouter.route("/:id").get(getTourById).patch(updateTour).delete(deleteTour);
 
-app.route("/api/users").get(getAllUsers).post(createUser);
-app
-  .route("/api/user/:id")
-  .get(getUserById)
-  .patch(updateUser)
-  .delete(deleteUser);
+userRouter.route("/").get(getAllUsers).post(createUser);
+userRouter.route("/:id").get(getUserById).patch(updateUser).delete(deleteUser);
+
+app.use("/api/user", userRouter);
+app.use("/api/tour", tourRouter);
 
 app.listen(5000, "localhost", () => {
   console.log("we are listening at 5000...");
