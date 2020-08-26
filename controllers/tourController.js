@@ -17,21 +17,13 @@ class TourController {
 
   getTourById(req, res) {
     const id = req.params.id;
-    const result = tours.filter((tour) => tour.id == id);
-    if (result.length) {
-      res.status(200).json({
-        success: true,
-        requestedAt: req.requestedAt,
-        data: {
-          tour: result,
-        },
-      });
-    } else {
-      res.status(404).json({
-        success: false,
-        message: `Couldnot find a tour with id ${id}`,
-      });
-    }
+    res.status(200).json({
+      success: true,
+      requestedAt: req.requestedAt,
+      data: {
+        tour: result,
+      },
+    });
   }
 
   createTour(req, res) {
@@ -67,43 +59,39 @@ class TourController {
         };
       }
     });
-    if (tours.filter((tour) => tour.id == id).length) {
-      const result = fs.writeFileSync(
-        `${__dirname}/../data/tours-simple.json`,
-        JSON.stringify(updated_tours)
-      );
-      res.status(202).json({
-        success: true,
-        data: {
-          tour: response,
-        },
-      });
-    } else {
-      res.status(404).json({
-        success: false,
-        message: `Couldnot find a tour with id ${id}`,
-      });
-    }
+    const result = fs.writeFileSync(
+      `${__dirname}/../data/tours-simple.json`,
+      JSON.stringify(updated_tours)
+    );
+    res.status(202).json({
+      success: true,
+      data: {
+        tour: response,
+      },
+    });
   }
 
   deleteTour(req, res) {
     const id = req.params.id;
     const updated_tours = tours.filter((tour) => tour.id != id);
-    if (updated_tours.length !== tours.length) {
-      const result = fs.writeFileSync(
-        `${__dirname}/../data/tours-simple.json`,
-        JSON.stringify(updated_tours)
-      );
-      res.status(200).json({
-        success: true,
-        message: `Successfully deleted tour with id ${id}`,
-      });
-    } else {
-      res.status(404).json({
+    const result = fs.writeFileSync(
+      `${__dirname}/../data/tours-simple.json`,
+      JSON.stringify(updated_tours)
+    );
+    res.status(200).json({
+      success: true,
+      message: `Successfully deleted tour with id ${id}`,
+    });
+  }
+
+  checkId(req, res, next, value) {
+    if (!tours.filter((tour) => tour.id == value).length) {
+      return res.status(404).json({
         success: false,
-        message: `Couldnot find a tour with id ${id} to delete`,
+        message: `Couldnot find a tour with id ${value}. from param checker`,
       });
     }
+    next();
   }
 }
 
