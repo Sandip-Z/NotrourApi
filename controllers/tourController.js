@@ -17,6 +17,7 @@ class TourController {
 
   getTourById(req, res) {
     const id = req.params.id;
+    const result = tours.filter((tour) => tour.id == id);
     res.status(200).json({
       success: true,
       requestedAt: req.requestedAt,
@@ -88,7 +89,17 @@ class TourController {
     if (!tours.filter((tour) => tour.id == value).length) {
       return res.status(404).json({
         success: false,
-        message: `Couldnot find a tour with id ${value}. from param checker`,
+        message: `Unable find a tour with id ${value}.`,
+      });
+    }
+    next();
+  }
+
+  checkBody(req, res, next) {
+    if (!req.body.name || !req.body.price) {
+      return res.status(400).json({
+        success: "false",
+        message: "Price and Name are required field",
       });
     }
     next();
