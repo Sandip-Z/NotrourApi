@@ -36,10 +36,12 @@ const importData = async () => {
 const deleteData = async () => {
   await Tour.deleteMany();
   console.log("Deleted Successfully");
+  process.exit();
 };
 
 if (process.argv[2] === "--import") {
   importData();
 } else if (process.argv[2] === "--delete") {
   deleteData();
+  process.exit();
 }
